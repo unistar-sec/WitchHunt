@@ -38,9 +38,18 @@ $(function(){
       url:    "/set",
       data:   postData,
       success: function(response, xml){
-        alert("Success");
-        console.log(response);
-        console.log(xml);
+        alert("Sent Success");
+        if (response == 1){
+          alert("架设成功");
+        }
+        else{
+          if (response == 0){
+            alert("架设失败");
+          }
+          else{
+            alert(response);
+          }
+        }
       },
       fail: function(status){
         alert(status);
