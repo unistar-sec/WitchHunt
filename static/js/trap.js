@@ -39,11 +39,11 @@ $(function(){
       data:   postData,
       success: function(response, xml){
         alert("Sent Success");
-        if (response == 1){
+        if (response == "1"){
           alert("架设成功");
         }
         else{
-          if (response == 0){
+          if (response == "0"){
             alert("架设失败");
           }
           else{
