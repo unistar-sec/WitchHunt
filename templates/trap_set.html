@@ -1,20 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <script src="js/jquery-3.2.1.min.js"> </script>
-    <script src="js/trap.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="js/bootstrap.min.js"></script>
-    <title>快速建立蜜罐页</title>
-  </head>
-  <body>
-    <h1> 快速建立蜜罐页 </h1>
+
+<head>
+  <meta charset="utf-8">
+  <script src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/trap.js')}}"></script>
+  <script src="{{url_for('static', filename='js/semantic.min.js')}}"></script>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/semantic.min.css')}}">
+  <title>快速建立蜜罐页</title>
+</head>
+
+<body>
+  <div align="center">
+    <h1> 蜜罐配置 </h1>
+    <div>
+      <div class="ui input">
+        备注：<input type="text" placeholder="定位微信黑产罪犯" id="notes" />
+      </div>
+    </div>
     <br>
-    <form>
-        网页后缀：<input type="text" placeholder="/trap.php"> <br>
-        页面内容：
-    </table>
-  </body>
+    <div class="ui labeled input">
+      <div class="ui label">
+        http://example.com/
+      </div>
+      <input type="text" placeholder="trap.php?id=3" id="url" />
+    </div>
+    <br><br>
+    <div>
+      模板：
+      <select class="ui dropdown" id="contentDrop">
+            <option value="500">500 Internal Server Error</option>
+            <option value="404">404 Not Found</option>
+            <option value="custom" id="custom">自定义</option>
+      </select>
+    </div>
+    <br>
+    <div>
+      有效时间：
+      <select class="ui dropdown" id="time">
+            <option value="1h">1小时</option>
+            <option value="6h">6小时</option>
+            <option value="1d">1天</option>
+            <option value="3d">3天</option>
+            <option value="1w">1星期</option>
+            <option value="30d">30天</option>
+            <option value="perm">∞</option>
+      </select>
+    </div>
+    <br>
+    <div class="ui labeled input">
+      <div class="ui label">
+        Email:
+      </div>
+      <input type="text" id="email" placeholder="admin@example.com">
+    </div>
+    <br><br>
+    <button class="ui button" id="submit">确定</button>
+  </div>
+</body>
+
 </html>
