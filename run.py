@@ -1,6 +1,6 @@
 from flask import request, render_template, Flask
 import dataset
-
+import os
 
 app = Flask(__name__)
 
@@ -15,7 +15,11 @@ def ScrapePage(target_url):
     from selenium import webdriver
     driver = webdriver.PhantomJS()
     driver.get(target_url)
-    return driver.page_source
+    source = driver.page_source
+    driver.quit()
+    # Remove log file
+    os.remove("ghostdriver.log")
+    return source
 
 
 def Setup(notes, url, content, time, email):
