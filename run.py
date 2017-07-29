@@ -4,6 +4,10 @@ import requests
 app = Flask(__name__)
 
 
+def Setup(notes, url, content, time, email):
+    pass
+
+
 @app.route("/set", methods=["GET", "POST"])
 def Set_Trap():
     if request.method == "POST":
