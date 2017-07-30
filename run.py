@@ -154,6 +154,12 @@ def Set_Trap():
         return render_template("trap_set.html")
 
 
+@app.after_request
+def apply_caching(response):
+    response.headers["Server"] = "nginx"
+    return response
+
+
 app.run(host="0.0.0.0", debug=False, port=80)
 
 
