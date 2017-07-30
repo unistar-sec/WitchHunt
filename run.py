@@ -32,16 +32,20 @@ def SendEmail(emailAddr, subject, body):
 def GetPreyInfo():
     # Generates a report regarding the prey who triggers the trap
     environ = request.environ
-    ip = str(environ["REMOTE_ADDR"])
-    port = str(environ["REMOTE_PORT"])
-    ua = str(environ["HTTP_USER_AGENT"])
-    method = str(environ["REQUEST_METHOD"])
-    path = str(environ["PATH_INFO"])
-    query = str(environ["QUERY_STRING"])
-    cookie = str(environ["HTTP_COOKIE"])
-    language = str(environ["HTTP_ACCEPT_LANGUAGE"])
-    encoding = str(environ["HTTP_ACCEPT_ENCODING"])
-    accept = str(environ["HTTP_ACCEPT"])
+    ip = str(environ["REMOTE_ADDR"]) if "REMOTE_ADDR" in environ else ""
+    port = str(environ["REMOTE_PORT"]) if "REMOTE_PORT" in environ else ""
+    ua = str(environ["HTTP_USER_AGENT"]
+             ) if "HTTP_USER_AGENT" in environ else ""
+    method = str(environ["REQUEST_METHOD"]
+                 ) if "REQUEST_METHOD" in environ else ""
+    path = str(environ["PATH_INFO"]) if "PATH_INFO" in environ else ""
+    query = str(environ["QUERY_STRING"]) if "QUERY_STRING" in environ else ""
+    cookie = str(environ["HTTP_COOKIE"]) if "HTTP_COOKIE" in environ else ""
+    language = str(environ["HTTP_ACCEPT_LANGUAGE"]
+                   ) if "HTTP_ACCEPT_LANGUAGE" in environ else ""
+    encoding = str(environ["HTTP_ACCEPT_ENCODING"]
+                   ) if "HTTP_ACCEPT_ENCODING" in environ else ""
+    accept = str(environ["HTTP_ACCEPT"]) if "HTTP_ACCEPT" in environ else ""
     # Make a request to fetch the detailed geo location regarding the prey
     response = requests.get("http://ip-api.com/json/" + ip).content
     # Convert String presentation of dict into a proper dict
@@ -60,20 +64,26 @@ def GetPreyInfo():
         "Accept: " + accept + "\n\n" + \
         "Geolocation Analysis:\n"
     for key in response.keys():
-        report += key + ": " + response[key] + "\n"
+        report += "\t" + key + ": " + response[key] + "\n"
     return report
 
 
 def ScrapePage(target_url):
     # Creates a selenium instance to fetch the webpage source
     # Returns the webpage html given url
-    from selenium import webdriver
-    driver = webdriver.PhantomJS()
-    driver.get(target_url)
-    source = driver.page_source
-    driver.quit()
-    # Remove log file
-    os.remove("ghostdriver.log")
+    # If phantomJS fails then try basic requests
+    if "http" not in target_url:
+        target_url = "http://" + target_url
+    try:
+        from selenium import webdriver
+        driver = webdriver.PhantomJS()
+        driver.get(target_url)
+        source = driver.page_source
+        driver.quit()
+        # Remove log file
+        os.remove("ghostdriver.log")
+    except:
+        source = requests.get(target_url).content
     return source
 
 
