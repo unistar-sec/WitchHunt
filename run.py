@@ -111,7 +111,7 @@ def Catch(e=None):
     result = table.find_one(url=suffix)
     if result is None:
         # No trap here
-        return "FUCK OFF"
+        return render_template("500.html")
     else:
         # Bingo !!! Trap is triggered !
         # Fetch all releavent information from database records
