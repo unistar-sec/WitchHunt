@@ -3,6 +3,7 @@ import dataset
 import os
 import requests
 from ast import literal_eval
+import smtplib
 #from datetime import datetime, timedelta
 
 app = Flask(__name__)
@@ -10,6 +11,22 @@ app = Flask(__name__)
 # Setting up the in-memory database
 db = dataset.connect("sqlite:///:memory:")
 table = db["Case"]
+
+
+def SendEmail(emailAddr, subject, body):
+    # Construct and sends the email report
+    gmail_user = 'wpetrap@gmail.com'
+    gmail_password = 'camiziwetazi'
+    sent_from = gmail_user
+    to = ['e0t3rx@gmail.com']
+    email_text = "From: %s\nTo: %s\nSubject: %s\n\n%s" \
+        % (sent_from, ", ".join(to), subject, body)
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.ehlo()
+    server.login(gmail_user, gmail_password)
+    server.sendmail(sent_from, to, email_text.encode("utf-8").strip())
+    server.close()
+    print('Email sent!')
 
 
 def GetPreyInfo():
@@ -99,13 +116,13 @@ def Catch(e=None):
         # Bingo !!! Trap is triggered !
         # Fetch all releavent information from database records
         trap_url = request.url
-        email_title = result["notes"]
+        email_title = "[!] " + result["notes"]
         email_addr = result["email"]
         html = result["content"]
         valid_time = result["time"]
         # Get all information about the prey
         report = GetPreyInfo()
-        print(report)
+        SendEmail(email_addr, email_title, report)
         # Return the pre-defined fake webpage
         return html
 
@@ -131,4 +148,3 @@ app.run(host="0.0.0.0", debug=False, port=80)
 # Need to get currrent timestamp of the time when set up
 # If record already exist during setup, check if the existing record has expired, if so, overwrite.
 # Calculate the expiry time when put in db
-# Need to implement email functions for sending notifications regarding the prey's info and time and project name
