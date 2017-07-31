@@ -19,7 +19,7 @@ def SendEmail(threadName, emailAddr, subject, body):
     gmail_user = 'wpetrap@gmail.com'
     gmail_password = 'camiziwetazi'
     sent_from = gmail_user
-    to = ['e0t3rx@gmail.com']
+    to = [emailAddr]
     email_text = "From: %s\nTo: %s\nSubject: %s\n\n%s" \
         % (sent_from, ", ".join(to), subject, body)
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
