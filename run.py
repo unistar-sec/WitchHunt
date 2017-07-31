@@ -156,6 +156,8 @@ def Set_Trap():
 
 @app.after_request
 def apply_caching(response):
+    # Hides the original server header that shows Python framework, and replace
+    # it with a fake "nginx"
     response.headers["Server"] = "nginx"
     return response
 
